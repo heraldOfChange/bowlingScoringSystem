@@ -8,7 +8,7 @@ class FooTest extends fixture.FunSpec with Matchers {
   type FixtureParam = scala.collection.mutable.Stack[Seq[(Seq[Seq[Int]], Int)]]
 
   def withFixture(test: OneArgTest): Outcome = {
-    val testData: Seq[(Seq[Seq[Int]], Int)] = Seq[(Seq[Seq[Int]], Int)](
+    val testDataNoBonuses: Seq[(Seq[Seq[Int]], Int)] = Seq[(Seq[Seq[Int]], Int)](
       (Seq.fill(10)(Seq(0, 0)), 0),
       (Seq.fill(10)(Seq(1, 0)), 10),
       (Seq.fill(10)(Seq(0, 1)), 10),
@@ -18,22 +18,22 @@ class FooTest extends fixture.FunSpec with Matchers {
 
     val testDataStrikes: Seq[(Seq[Seq[Int]], Int)] = Seq[(Seq[Seq[Int]], Int)](
       (Seq.fill(12)(Seq(10)), 180),
-      (0 to 10 map { x =>
-        if (x % 2 == 0) Seq(10) else Seq(7, 0)
-      }, 35),
-      (0 to 10 map { x =>
-        if (x % 3 == 0) Seq(10) else Seq(3, 2)
-      }, 15)
+      (0 to 10 map { x => if (x % 3 == 0) Seq(10) else Seq(3, 2) }, 15),
+      (0 to 10 map { x => if (x % 2 == 0) Seq(10) else Seq(7, 0) }, 35)
     )
 
     val testDataSpares: Seq[(Seq[Seq[Int]], Int)] = Seq[(Seq[Seq[Int]], Int)](
-      (Seq.fill(10)(Seq(7, 3)), 63)
+      (Seq.fill(10)(Seq(7, 3)), 63),
+      (0 to 10 map { x => if (x % 2 == 0) Seq(5, 5) else Seq(0, 3) }, 0),
+      (0 to 10 map { x => if (x % 2 == 0) Seq(5, 5) else Seq(0, 3) }, 0),
+      (0 to 10 map { x => if (x % 2 == 0) Seq(5, 5) else Seq(3, 3) }, 15),
+      (0 to 10 map { x => if (x % 2 == 0) Seq(5, 5) else Seq(8, 1) }, 40)
     )
 
     val stack = new scala.collection.mutable.Stack[Seq[(Seq[Seq[Int]], Int)]]
     stack.push(testDataSpares)
     stack.push(testDataStrikes)
-    stack.push(testData)
+    stack.push(testDataNoBonuses)
     test(stack)
   }
 
@@ -53,9 +53,12 @@ class FooTest extends fixture.FunSpec with Matchers {
         }
       }
 
-      /*it(s"calculate games with spares successfully") { fixtures =>
-
-      }*/
+      it(s"calculate games with spares successfully") { fixtures =>
+        val fooObj = new Foo()
+        fixtures(2).foreach { testData =>
+          fooObj.calculateSpareBonus(testData._1) shouldBe testData._2
+        }
+      }
     }
   }
 
