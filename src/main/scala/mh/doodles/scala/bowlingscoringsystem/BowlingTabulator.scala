@@ -2,7 +2,7 @@ package mh.doodles.scala.bowlingscoringsystem
 
 import scala.util.{Success, Try}
 
-class Foo {
+class BowlingTabulator {
 
   def peekAhead(data: Seq[Seq[Int]], index: Int) = Try(data(index))
 

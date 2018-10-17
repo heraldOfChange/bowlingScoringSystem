@@ -3,7 +3,7 @@ package mh.doodles.scala.bowlingscoringsystem
 import org.scalatest._
 import scala.collection.immutable.Seq
 
-class FooTest extends fixture.FunSpec with Matchers {
+class BowlingTabulatorTest extends fixture.FunSpec with Matchers {
 
   type FixtureParam = scala.collection.mutable.Stack[Seq[(Seq[Seq[Int]], Int)]]
 
@@ -48,28 +48,28 @@ class FooTest extends fixture.FunSpec with Matchers {
   describe("class Foo") {
     describe(s"pass the following scenarios") {
       it(s"calculate games without bonuses successfully") { fixtures =>
-        val fooObj = new Foo()
+        val fooObj = new BowlingTabulator()
         fixtures.head.foreach { testData =>
           fooObj.calculateTotal(testData._1) shouldBe testData._2
         }
       }
 
       it(s"calculate games with bonuses successfully") { fixtures =>
-        val fooObj = new Foo()
+        val fooObj = new BowlingTabulator()
         fixtures(1).foreach { testData =>
           fooObj.calculateTotal(testData._1) shouldBe testData._2
         }
       }
 
       it(s"calculate games with strikes successfully") { fixtures =>
-        val fooObj = new Foo()
+        val fooObj = new BowlingTabulator()
         fixtures(2).foreach { testData =>
           fooObj.calculateStrikeBonus(testData._1) shouldBe testData._2
         }
       }
 
       it(s"calculate games with spares successfully") { fixtures =>
-        val fooObj = new Foo()
+        val fooObj = new BowlingTabulator()
         fixtures(3).foreach { testData =>
           fooObj.calculateSpareBonus(testData._1) shouldBe testData._2
         }
