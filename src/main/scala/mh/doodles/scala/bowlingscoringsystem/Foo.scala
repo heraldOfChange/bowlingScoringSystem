@@ -25,7 +25,7 @@ class Foo {
         case Success(next) =>
           if (isAStrike(a) && !isAStrike(next)) next.sum
           else if (isAStrike(a) && isAStrike(next)) peekAhead(data, b + 2) match {
-            case Success(next2) => next.sum + next2.sum
+            case Success(next2) => next.sum + next2.head
             case _ => 0
           }
           else 0
@@ -54,6 +54,12 @@ class Foo {
     * @param data the final bowling score playoff
     * @return the final game score
     */
-  def calculateTotal(data: Seq[Seq[Int]]): Int = data.map(_.sum).sum
+  def calculateTotal(data: Seq[Seq[Int]]): Int = {
+    val tabulatedScore = data.map(_.sum).sum
+    val strikeBonus = calculateStrikeBonus(data)
+    val spareBonus = calculateSpareBonus(data)
+
+    tabulatedScore + strikeBonus + spareBonus
+  }
 
 }
